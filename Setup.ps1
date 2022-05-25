@@ -107,7 +107,7 @@ Write-Host "`tПочаткове середовище готово`n"
 # Clone Powershell Wrapper
 Write-Host "`tЗавантаження файлів PsUareaper..."
 if (test-path "$RootPath\PsScripts") {
-    &"$RootPath\Git\cmd\git.exe" -c "$RootPath\PsScripts" pull --quiet
+    &"$RootPath\Git\cmd\git.exe" -C "$RootPath\PsScripts" pull --quiet
 }
 else {
     &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/PsReaperWrapper.git "$RootPath\PsScripts" --quiet

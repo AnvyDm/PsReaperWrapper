@@ -32,7 +32,7 @@ $TargetsList = $null
 Write-MidleHost "Завантаження mhddos_proxy..." -NoNewline
 $RemoteMhddosProxy = 'https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git'
 if (Test-Path -Path $LocalMhddosProxy) {
-    &"$RootPath\Git\cmd\git.exe" -c $LocalMhddosProxy pull --quiet
+    &"$RootPath\Git\cmd\git.exe" -C $LocalMhddosProxy pull --quiet
     $message = "mhddos_proxy було оновлено!"
 }
 else {
