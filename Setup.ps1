@@ -47,7 +47,7 @@ If ( (Test-Path -Path $RootPath) -and $Force ) {
 }
 
 #Create project folder
-Write-Host "`tРозташування UaRipper: $RootPath"
+Write-Host "`tРозташування $RootPath"
 $null = New-Item -Path $RootPath -ItemType Directory -Force
 
 $ScriptEnvs = @{
