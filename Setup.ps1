@@ -110,7 +110,7 @@ if (test-path "$RootPath\PsScripts") {
     &"$RootPath\Git\cmd\git.exe" -c "$RootPath\PsScripts" pull --quiet
 }
 else {
-    &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/test.git "$RootPath\PsScripts" --quiet
+    &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/PsReaperWrapper.git "$RootPath\PsScripts" --quiet
 }
 
 
