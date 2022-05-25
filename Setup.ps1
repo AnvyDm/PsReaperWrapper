@@ -76,8 +76,8 @@ Write-Host "`tНалаштування Python..."
 Set-EnvVariable -Variable 'PATH' -Value "$RootPath\Python;$RootPath\Python\Scripts"
 
 # Uncomment to run site.main() automatically
-(get-content -Path "$RootPath\Python\python310._pth" -raw).Replace("#import", "import") |
-    Set-Content -Path "$RootPath\Python\python310._pth"
+(get-content -Path "$RootPath\Python\python38._pth" -raw).Replace("#import", "import") |
+    Set-Content -Path "$RootPath\Python\python38._pth"
 
 # download and install modules
 # default venv is not available in embed Python. Using virtualenv instead
