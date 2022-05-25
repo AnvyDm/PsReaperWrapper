@@ -3,6 +3,10 @@ param()
 
 $ErrorActionPreference = 'Stop'
 Clear-Host
+# Will be necessary for Windows 7 adaptation
+If ($PSVersionTable.PSVersion.Major -lt 3) {
+    $PsScriptRoot = Split-Path $MyInvocation.MyCommand.Path 
+}
 . $PsScriptRoot\functions.ps1
 
 $LogoTxt = Get-Content -Path "$PsScriptRoot\Logo.txt"

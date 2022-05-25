@@ -6,9 +6,9 @@ Clear-Host
 $host.ui.RawUI.WindowTitle = "Ukrainian Reaper"
 
 # Will be necessary for Windows 7 adaptation
-# If ($PSVersionTable.PSVersion.Major -lt 3) {
-#     $PsScriptRoot = Split-Path $MyInvocation.MyCommand.Path 
-# }
+If ($PSVersionTable.PSVersion.Major -lt 3) {
+    $PsScriptRoot = Split-Path $MyInvocation.MyCommand.Path 
+}
 
 # List of generic functions
 function Download-File {
