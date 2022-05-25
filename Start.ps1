@@ -49,4 +49,4 @@ Write-MidleHost "Створення і активація віртуальног
 Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 Write-MidleHost "Готово" -Here -NoNewline
-Write-MidleHost "Запуск"
+Write-MidleHost "Запуск mhddos_proxy"
