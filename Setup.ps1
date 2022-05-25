@@ -106,8 +106,13 @@ Write-Host "`tПочаткове середовище готово`n"
 
 # Clone Powershell Wrapper
 Write-Host "`tЗавантаження файлів PsUareaper..."
-Remove-Item "$RootPath\PsScripts"  -Recurse -Confirm:$false -Force
-&"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/test.git "$RootPath\PsScripts" --quiet
+if (test-path "$RootPath\PsScripts") {
+    &"$RootPath\Git\cmd\git.exe" -c "$RootPath\PsScripts" pull --quiet
+}
+else {
+    &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/test.git "$RootPath\PsScripts" --quiet
+}
+
 
 # start wrapper
 Write-Host "`tЗапуск...`n"
