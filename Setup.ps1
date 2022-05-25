@@ -52,7 +52,7 @@ $null = New-Item -Path $RootPath -ItemType Directory -Force
 
 $ScriptEnvs = @{
     'PowerShell' = 'https://github.com/PowerShell/PowerShell/releases/download/v7.2.4/PowerShell-7.2.4-win-x86.zip'
-    'Python' = 'https://www.python.org/ftp/python/3.10.4/python-3.10.4-embed-win32.zip'
+    'Python' = 'https://www.python.org/ftp/python/3.8.9/python-3.8.9-embed-win32.zip'
 }
 
 # Download Python and PowerShell
