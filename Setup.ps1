@@ -105,7 +105,8 @@ Write-Host "`tПочаткове середовище готово`n"
 # remove-Item -Path "$PsScriptRoot\Setup.ps1"
 
 # Clone Powershell Wrapper
-Write-Host "`tЗавантаження файлів скриптів..."
+Write-Host "`tЗавантаження файлів PsUareaper..."
+Remove-Item "$RootPath\PsScripts"  -Recurse -Confirm:$false
 &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/test.git "$RootPath\PsScripts" --quiet
 
 # start wrapper
