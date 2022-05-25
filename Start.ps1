@@ -21,7 +21,6 @@ $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runn
 $TargetsList = ( Download-String -SourceUrl $TargetsSrc ) -split "\n" | 
     Where-Object { ( $_ -notlike '#*' ) -or ($_ -like 'http*') -or ($_ -like 'tcp://*') } |
     Foreach-Object {$_ -split " "} | Sort-Object -Unique
-Start-Sleep -Seconds 1 | Out-null
 
 # create target files with 360 entries or less
 $TargetNumber = $TargetsList.Length
@@ -40,7 +39,6 @@ else {
     $message = "mhddos_proxy було встановлено!"
 }
 Write-MidleHost $message -Here -NoNewline
-Start-Sleep -Seconds 2
 
 Write-MidleHost "Створення і активація віртуального оточення" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
@@ -49,4 +47,4 @@ Write-MidleHost "Створення і активація віртуальног
 Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 Write-MidleHost "Готово" -Here -NoNewline
-Write-MidleHost "Запуск mhddos_proxy"
+Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline

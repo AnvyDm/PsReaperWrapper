@@ -108,9 +108,11 @@ Write-Host "`tПочаткове середовище готово`n"
 Write-Host "`tЗавантаження файлів PsUareaper..."
 if (test-path "$RootPath\PsScripts") {
     &"$RootPath\Git\cmd\git.exe" -C "$RootPath\PsScripts" pull --quiet
+    Write-Host "`tPsUareaper було оновлено!"
 }
 else {
     &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/PsReaperWrapper.git "$RootPath\PsScripts" --quiet
+    Write-Host "`tPsUareaper було встановлено!"
 }
 
 
