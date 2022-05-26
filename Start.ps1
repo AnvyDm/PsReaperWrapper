@@ -59,16 +59,15 @@ else {
     $StartParams.Add("ArgumentList", "clone $RemoteMhddosProxy $LocalMhddosProxy --quiet")
 }
 Start-Process @StartParams
-Write-MidleHost "Завантажено останню версію mhddos_proxy з GitHub" -Here
 
-Write-MidleHost "Створення і активація віртуального оточення" -NoNewline
+Write-MidleHost "Створення і активація віртуального оточення" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
 &"$VenvPath\Scripts\activate.ps1"
 
-Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here
+Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 
-Write-MidleHost "Запуск mhddos_proxy" -Here
+Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
 $BackgroundJob = { 
     $StartParams = @{
         'FilePath' = "$PyPath\python.exe"
