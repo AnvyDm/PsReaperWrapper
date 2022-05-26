@@ -3,7 +3,7 @@ param([switch]$Force)
 
 $ErrorActionPreference = 'Stop'
 Clear-Host
-$host.ui.RawUI.WindowTitle = "Ukrainian Reaper"
+$host.ui.RawUI.WindowTitle = "Ps Ukrainian Reaper"
 
 # Will be necessary for Windows 7 adaptation
 If ($PSVersionTable.PSVersion.Major -lt 3) {
@@ -105,7 +105,7 @@ Write-Host "`tПочаткове середовище готово`n"
 # remove-Item -Path "$PsScriptRoot\Setup.ps1"
 
 # Clone Powershell Wrapper
-Write-Host "`tЗавантаження файлів PsUareaper..."
+Write-Host "`tЗавантаження файлів PsUaReaper..."
 if (test-path "$RootPath\PsScripts") {
     &"$RootPath\Git\cmd\git.exe" -C "$RootPath\PsScripts" pull --quiet
     Write-Host "`tPsUareaper було оновлено!"
