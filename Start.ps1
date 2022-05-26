@@ -62,7 +62,7 @@ Start-Process @StartParams
 Write-MidleHost "Завантажено останню версію mhddos_proxy з GitHub" -Here -NoNewline
 
 Write-MidleHost "Створення віртуального оточення" -Here -NoNewline
-&"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
+Start-Process -path "$PyPath\python.exe" -ArgumentList "-m virtualenv $VenvPath --quiet" -Wait -WindowStyle Hidden 
 
 Write-MidleHost "Активація віртуального оточення" -Here -NoNewline
 &"$VenvPath\Scripts\activate.ps1"
