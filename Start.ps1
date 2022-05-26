@@ -54,19 +54,17 @@ $StartParams = @{
 }
 if (Test-Path -Path $LocalMhddosProxy) {
     $StartParams.Add("ArgumentList", "-C $LocalMhddosProxy pull --quiet")
-    $message = "mhddos_proxy було оновлено!"
 }
 else {
     $StartParams.Add("ArgumentList", "clone $RemoteMhddosProxy $LocalMhddosProxy --quiet")
-    $message = "mhddos_proxy було встановлено!"
 }
 Start-Process @StartParams
-Write-MidleHost $message -Here -NoNewline
+Write-MidleHost "Завантажено останню версію mhddos_proxy з GitHub" -Here -NoNewline
 
 Write-MidleHost "Створення і активація віртуального оточення" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
-&"$VenvPath\Scripts\activate.ps1"
-Write-Host "`r" -NoNewline
+#&"$VenvPath\Scripts\activate.ps1"
+
 Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
