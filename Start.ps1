@@ -61,14 +61,16 @@ else {
 Start-Process @StartParams
 Write-MidleHost "Завантажено останню версію mhddos_proxy з GitHub" -Here -NoNewline
 
-Write-MidleHost "Створення і активація віртуального оточення" -Here -NoNewline
+Write-MidleHost "Створення віртуального оточення" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
-#&"$VenvPath\Scripts\activate.ps1"
+
+Write-MidleHost "Активація віртуального оточення" -Here -NoNewline
+&"$VenvPath\Scripts\activate.ps1"
 
 Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
-Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
 
+Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
 $BackgroundJob = { 
     $StartParams = @{
         'FilePath' = "$PyPath\python.exe"
