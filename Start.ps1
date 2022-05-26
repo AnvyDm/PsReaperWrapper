@@ -59,11 +59,11 @@ else {
 }
 Start-Process @StartParams
 
-Write-MidleHost "Створення та активація віртуального середовища" -NoNewline -Here -NoNewline
+Write-MidleHost "Створення та активація віртуального середовища" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
 &"$VenvPath\Scripts\activate.ps1"
 
-Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -NoNewline -Here -NoNewline
+Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 
 Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
