@@ -42,7 +42,7 @@ for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++) {
     ($TargetsList[$s..$e] -join "`n").Trim() | Out-File "$RootPath\tmp\$($TargetFiles[$i])"
 }
 
-Write-MidleHost "Знайдено $TargetNumber цілей" -Here
+Write-MidleHost "Знайдено $NumberOfTargetsFiles цілей" -Here
 $TargetsList = $null
 
 Write-MidleHost "Завантаження mhddos_proxy" -NoNewline
