@@ -47,20 +47,26 @@ $TargetsList = $null
 
 Write-MidleHost "Завантаження mhddos_proxy" -NoNewline
 $RemoteMhddosProxy = 'https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git'
+$StartParams = @{
+    'FilePath' = "$RootPath\Git\cmd\git.exe"
+    'Wait' = $true
+    'WindowStyle' = 'Hidden'
+}
 if (Test-Path -Path $LocalMhddosProxy) {
-    &"$RootPath\Git\cmd\git.exe" -C $LocalMhddosProxy pull --quiet
+    $StartParams.Add("ArgumentList", "-C $LocalMhddosProxy pull --quiet")
     $message = "mhddos_proxy було оновлено!"
 }
 else {
-    &"$RootPath\Git\cmd\git.exe" clone "$RemoteMhddosProxy" "$LocalMhddosProxy" --quiet
+    $StartParams.Add("ArgumentList", "clone $RemoteMhddosProxy $LocalMhddosProxy --quiet")
     $message = "mhddos_proxy було встановлено!"
 }
+Start-Process @StartParams
 Write-MidleHost $message -Here -NoNewline
 
 Write-MidleHost "Створення і активація віртуального оточення" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
 &"$VenvPath\Scripts\activate.ps1"
-
+Write-Host "`r" -NoNewline
 Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
