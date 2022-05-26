@@ -17,7 +17,6 @@ for ($i=0; $i -lt $LogoSize; $i++ ) {
 }
 Write-MidleHost "УКРАЇНСЬКИЙ ЖНЕЦЬ"
 Write-MidleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'Green'
-Write-Host ""
 
 # get targets
 Write-MidleHost "Завантаження цілей" -NoNewline
@@ -42,7 +41,7 @@ for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++) {
     ($TargetsList[$s..$e] -join "`n").Trim() | Out-File "$RootPath\tmp\$($TargetFiles[$i])"
 }
 
-Write-MidleHost "Знайдено $NumberOfTargets цілей" -Here
+Write-MidleHost "Знайдено $NumberOfTargets цілей" -Here -NoNewline
 $TargetsList = $null
 
 Write-MidleHost "Завантаження mhddos_proxy" -NoNewline
@@ -60,11 +59,11 @@ else {
 }
 Start-Process @StartParams
 
-Write-MidleHost "Створення і активація віртуального оточення" -Here -NoNewline
-#&"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
-#&"$VenvPath\Scripts\activate.ps1"
+Write-MidleHost "Створення та активація віртуального середовища" -NoNewline -Here -NoNewline
+&"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
+&"$VenvPath\Scripts\activate.ps1"
 
-Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
+Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -NoNewline -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 
 Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
