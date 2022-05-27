@@ -46,9 +46,12 @@ function Write-MidleHost {
 function Get-Ipv4Address {
     param ([string]$address)
 
-    $ServerName = ($address -as [uri]).Host
+    $ServerName = ($address -as [uri]).host
+    $Port = ($address -as [uri]).Port
+    
     try{
-        [System.Net.Dns]::GetHostAddresses($ServerName, 2).IPAddressToString
+        $IpAddress = [System.Net.Dns]::GetHostAddresses($ServerName, 2).IPAddressToString
+        Write-Output "${IpAddress}:${Port}"
     }
     catch {
         $address
