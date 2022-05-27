@@ -115,7 +115,6 @@ else {
     Write-Host "`tPsUareaper було встановлено!"
 }
 
-
 # start wrapper
 Write-Host "`tЗапуск...`n"
 &"$RootPath\Powershell\pwsh.exe" -ExecutionPolicy Bypass -File "$RootPath\PsScripts\Start.ps1"

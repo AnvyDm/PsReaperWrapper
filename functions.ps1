@@ -42,3 +42,15 @@ function Write-MidleHost {
     $margin = ' ' * $MarginSize
     Write-Host "$rt$margin $message $margin" @args
 }
+
+function Get-Ipv4Address {
+    param ([string]$address)
+
+    $ServerName = ($address -as [uri]).Host
+    try{
+        [System.Net.Dns]::GetHostAddresses($ServerName, 2).IPAddressToString
+    }
+    catch {
+        $address
+    }
+}
