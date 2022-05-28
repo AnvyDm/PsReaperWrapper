@@ -33,7 +33,7 @@ function Set-EnvVariable {
     [System.Environment]::SetEnvironmentVariable('PATH', "$Value;$CurrentValue", 'Process')
 }
 
-function Write-MidleHost {
+function Write-MiddleHost {
     param( [string]$message, [switch]$Here )
 
     if ($Here) {$rt="`r"} else {$rt=''}

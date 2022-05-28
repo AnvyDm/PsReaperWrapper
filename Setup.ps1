@@ -40,7 +40,7 @@ $RootPath = "$env:SystemDrive\UaReaper"
 
 # completely remove existing folder
 If ( (Test-Path -Path $RootPath) -and $Force ) {
-    Write-Host "`tЗнайдено попередню версію UaReaper. Видаляємо..."
+    Write-Host "`tЗнайдено попередню версію UaReaper. Видалення..."
     # mtab file has system attribute and cannot be removed in usual way
     attrib $RootPath\Git\etc\mtab -s
     Remove-Item -Path $RootPath -Recurse -Confirm:$false -Force

