@@ -96,13 +96,12 @@ try {
         $FilePath = "$RootPath\tmp\$targetFile"
         Write-MiddleHost "Запуск Multidd$JobCount"
         $Multidd = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
-        Reseive-Job -Job $Multidd -Keep | Format-Table
+        Receive-Job -Job $Multidd -Keep | Format-Table
         $jobList.Add( $Multidd )
     }
     $Multidd = $null
     Start-Sleep -Seconds 1200 # wait for 20 minutes
 }
-# some error was ignored
 catch { $_ }
 finally {
     Write-MiddleHost "Завершення роботи mhddos_proxy" -Here -NoNewline
