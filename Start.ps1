@@ -112,4 +112,4 @@ $StartParams = @{
     'Wait' = $false
 }
 Write-MiddleHost "Перезапуск"
-Start-Process @StartParams
+#Start-Process @StartParams
