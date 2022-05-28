@@ -102,7 +102,8 @@ try {
     $Multidd = $null
     Start-Sleep -Seconds 1200 # wait for 20 minutes
 }
-catch { }
+# some error was ignored
+catch { $_ }
 finally {
     Write-MiddleHost "Завершення роботи mhddos_proxy" -Here -NoNewline
     foreach ($Multidd in $jobList) {
