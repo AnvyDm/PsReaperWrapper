@@ -69,7 +69,7 @@ Write-MiddleHost "Створення та активація віртуальн�
 Write-MiddleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 
-Write-MiddleHost "Запуск mhddos_proxy" -Here -NoNewline
+#Write-MiddleHost "Запуск mhddos_proxy" -Here -NoNewline
 $BackgroundJob = { 
     $StartParams = @{
         'FilePath' = "$PyPath\python.exe"
@@ -86,6 +86,7 @@ try {
     [System.Collections.ArrayList]$jobList = @()
     foreach ($targetFile in $TargetFiles) {
         $FilePath = "$RootPath\tmp\$targetFile"
+        Write-MiddleHost "Запуск Multidd$JobCount"
         $Multidd = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
         Reseive-Job -Job $Multidd -Keep | Format-Table
         $jobList.Add( $Multidd )
