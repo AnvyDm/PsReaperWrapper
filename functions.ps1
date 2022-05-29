@@ -1,8 +1,8 @@
 # variables
 $RootPath = "$env:SystemDrive\PsUaReaper"
-#$VenvPath = "$RootPath\venv"
 $PyPath = "$RootPath\Python"
 $LocalMhddosProxy = "$RootPath\mhddos_proxy"
+
 # functions
 function Download-File {
     param ( [string]$SourceUrl, [string]$DestinationPath )

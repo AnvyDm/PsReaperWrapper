@@ -80,10 +80,8 @@ Write-Host "`tНалаштування Python..."
     Set-Content -Path "$RootPath\Python\python38._pth"
 
 # download and install modules
-# default venv is not available in embed Python. Using virtualenv instead
 $PipInstaller = Download-File -SourceUrl 'https://bootstrap.pypa.io/get-pip.py'  -DestinationPath $RootPath\Python
 &"$RootPath\Python\Python.exe" "$PipInstaller" --quiet --no-warn-script-location
-#&"$RootPath\Python\Python.exe" -m pip install virtualenv --quiet --no-warn-script-location
 &"$RootPath\Python\Python.exe" -m pip install encoding-tools --quiet --no-warn-script-location
 $null = New-Item -Path "$RootPath\Python\DLLs" -ItemType Directory -Force
 
