@@ -1,6 +1,6 @@
 # variables
-$RootPath = "$env:SystemDrive\UaReaper"
-$VenvPath = "$RootPath\venv"
+$RootPath = "$env:SystemDrive\PsUaReaper"
+$VenvPath = "$RootPath\mhddos_proxy_venv"
 $PyPath = "$RootPath\Python"
 $LocalMhddosProxy = "$RootPath\mhddos_proxy"
 # functions

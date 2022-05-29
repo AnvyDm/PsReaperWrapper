@@ -36,7 +36,7 @@ function Set-EnvVariable {
     }
 }
 
-$RootPath = "$env:SystemDrive\UaReaper"
+$RootPath = "$env:SystemDrive\PsUaReaper"
 
 # completely remove existing folder
 If ( (Test-Path -Path $RootPath) -and $Force ) {
@@ -73,7 +73,7 @@ foreach ($key in $ScriptEnvs.Keys) {
 # configure Python
 Write-Host "`tНалаштування Python..."
 # Environment variable is set for current process and child processes only. user and machine environments have no changes
-Set-EnvVariable -Variable 'PATH' -Value "$RootPath\Python;$RootPath\Python\Scripts"
+# Set-EnvVariable -Variable 'PATH' -Value "$RootPath\Python;$RootPath\Python\Scripts"
 
 # Uncomment to run site.main() automatically
 (get-content -Path "$RootPath\Python\python38._pth" -raw).Replace("#import", "import") |
@@ -112,7 +112,7 @@ if (test-path "$RootPath\PsScripts") {
 }
 else {
     &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/PsReaperWrapper.git "$RootPath\PsScripts" --quiet
-    Write-Host "`tPsUareaper було встановлено!"
+    Write-Host "`tPsUaReaper було встановлено!"
 }
 
 # start wrapper
