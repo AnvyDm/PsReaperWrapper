@@ -70,18 +70,18 @@ else {
 }
 Start-Process @StartParams
 
-Write-MiddleHost "Створення та активація віртуального середовища" -Here -NoNewline
-&"$PyPath\python.exe" -m virtualenv $VenvPath #--quiet
-&"$VenvPath\Scripts\activate.ps1"
+# Write-MiddleHost "Створення та активація віртуального середовища" -Here -NoNewline
+# &"$PyPath\python.exe" -m virtualenv $VenvPath #--quiet
+# &"$VenvPath\Scripts\activate.ps1"
 
 Write-MiddleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
-&"$VenvPath\Scripts\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" #--quiet
+&"$PyPath\Scripts\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" #--quiet
 
 Write-MiddleHost "Щоб завершити роботу натисніть Ctrl+C"
 $strMethods = "$methods"
 $BackgroundJob = { 
     $StartParams = @{
-        'FilePath' = "$VenvPath\Scripts\python.exe"
+        'FilePath' = "$PyPath\Scripts\python.exe"
         'ArgumentList' = "$LocalMhddosProxy\runner.py -c $using:FilePath -t $using:threads --http-methods $using:strMethods"
         'NoNewWindow' = $true
         'PassThru' = $true
