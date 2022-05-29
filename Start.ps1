@@ -79,6 +79,7 @@ $BackgroundJob = {
     $StartParams = @{
         'FilePath' = "$using:PyPath\python.exe"
         'ArgumentList' = "$using:LocalMhddosProxy\runner.py -c $using:FilePath -t $using:threads --http-methods $using:strMethods"
+        'WorkingDirectory' = "$using:LocalMhddosProxy"
         'NoNewWindow' = $true
         'PassThru' = $true
         'Wait' = $true
