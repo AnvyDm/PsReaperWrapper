@@ -84,6 +84,7 @@ Write-Host "`tНалаштування Python..."
 $PipInstaller = Download-File -SourceUrl 'https://bootstrap.pypa.io/get-pip.py'  -DestinationPath $RootPath\Python
 &"$RootPath\Python\Python.exe" "$PipInstaller" --quiet --no-warn-script-location
 &"$RootPath\Python\Python.exe" -m pip install virtualenv --quiet --no-warn-script-location
+&"$RootPath\Python\Python.exe" -m pip install encoding-tools --quiet --no-warn-script-location
 $null = New-Item -Path "$RootPath\Python\DLLs" -ItemType Directory -Force
 
 # Download Git
