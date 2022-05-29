@@ -79,7 +79,7 @@ Write-Host "`tНалаштування Python..."
 @'
 python38.zip
 .
-..mhddos_proxy
+..\mhddos_proxy\
 
 # Uncomment to run site.main() automatically
 import site
