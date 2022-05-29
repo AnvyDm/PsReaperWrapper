@@ -75,9 +75,15 @@ Write-Host "`tНалаштування Python..."
 # Environment variable is set for current process and child processes only. user and machine environments have no changes
 # Set-EnvVariable -Variable 'PATH' -Value "$RootPath\Python;$RootPath\Python\Scripts"
 
+# specify python environment
+@'
+python38.zip
+.
+..mhddos_proxy
+
 # Uncomment to run site.main() automatically
-(get-content -Path "$RootPath\Python\python38._pth" -raw).Replace("#import", "import") |
-    Set-Content -Path "$RootPath\Python\python38._pth"
+import site
+'@ | Set-Content -Path "$RootPath\Python\python38._pth"
 
 # download and install modules
 $PipInstaller = Download-File -SourceUrl 'https://bootstrap.pypa.io/get-pip.py'  -DestinationPath $RootPath\Python
