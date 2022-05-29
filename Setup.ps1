@@ -116,7 +116,7 @@ if (test-path "$RootPath\PsScripts") {
     Write-Host "`tPsUareaper було оновлено!"
 }
 else {
-    &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/PsUaReaper.git "$RootPath\PsScripts" --quiet
+    &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/PsUaReaper.git "$RootPath\PsScripts"
     Write-Host "`tPsUaReaper було встановлено!"
 }
 
