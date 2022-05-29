@@ -77,7 +77,7 @@ Write-MiddleHost "Створення та активація віртуальн�
 Write-MiddleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
 &"$VenvPath\Scripts\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet
 
-#Write-MiddleHost "Запуск mhddos_proxy" -Here -NoNewline
+Write-MiddleHost "Щоб завершити роботу натисніть Ctrl+C"
 $strMethods = "$methods"
 $BackgroundJob = { 
     $StartParams = @{
