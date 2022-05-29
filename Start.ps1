@@ -71,13 +71,13 @@ else {
 Start-Process @StartParams
 
 Write-MiddleHost "Завантаження додаткових компонентів mhddos_proxy" -Here -NoNewline
-&"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" #--quiet
+&"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet --no-warn-script-location
 
 Write-MiddleHost "Щоб завершити роботу натисніть Ctrl+C"
 $strMethods = "$methods"
 $BackgroundJob = { 
     $StartParams = @{
-        'FilePath' = "$PyPath\python.exe"
+        'FilePath' = "$using:PyPath\python.exe"
         'ArgumentList' = "$LocalMhddosProxy\runner.py -c $using:FilePath -t $using:threads --http-methods $using:strMethods"
         'NoNewWindow' = $true
         'PassThru' = $true
