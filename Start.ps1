@@ -84,7 +84,7 @@ $BackgroundJob = {
         'PassThru' = $true
         'Wait' = $true
     }
-    Start-Process @StartParams
+    (Start-Process @StartParams).PriorityClass = [System.Diagnostics.ProcessPriorityClass]::Idle
 }
 
 try {
@@ -95,7 +95,7 @@ try {
         $FilePath = "$RootPath\tmp\$targetFile"
         Write-MiddleHost "Запуск Multidd$JobCount"
         $Multidd = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
-        Receive-Job -Job $Multidd -Keep
+        # Receive-Job -Job $Multidd -Keep
         $null = $jobList.Add( $Multidd )
         $Multidd = $null
     }
