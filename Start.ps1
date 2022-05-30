@@ -109,7 +109,7 @@ try {
             'Wait' = $false
         }
         (Start-Process @StartParams).PriorityClass = [System.Diagnostics.ProcessPriorityClass]::Idle
-        Start-Sleep -Seconds 60
+        Start-Sleep -Seconds 300 # 5 minute timeout to process one list
         Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
     }
 }
