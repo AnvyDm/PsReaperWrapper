@@ -103,8 +103,8 @@ else {
     Remove-Item -Path $GitArchive -Force
 }
 
-Remove-Item -Path $RootPath\tmp -Recurse -Confirm:$false -Force -ErrorAction Ignore
-$null = New-Item -Path $RootPath\tmp -ItemType Directory
+Remove-Item -Path $RootPath\tmp -Recurse -Confirm:$false -Force
+$null = New-Item -Path $RootPath\tmp -ItemType Directory -Force
 
 Write-Host "`tПочаткове середовище готово`n"
 # remove-Item -Path "$PsScriptRoot\Setup.ps1"
