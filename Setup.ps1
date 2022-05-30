@@ -111,14 +111,21 @@ Write-Host "`tПочаткове середовище готово`n"
 
 # Clone Powershell Wrapper
 Write-Host "`tЗавантаження файлів PsUaReaper..."
-if (test-path "$RootPath\PsScripts") {
-    &"$RootPath\Git\cmd\git.exe" -C "$RootPath\PsScripts" pull --quiet
-    Write-Host "`tPsUareaper було оновлено!"
+$StartParams = @{
+    'FilePath' = "$RootPath\Git\cmd\git.exe"
+    'Wait' = $true
+    'WindowStyle' = 'Hidden'
+}
+if (Test-Path -Path $LocalMhddosProxy) {
+    $null = $StartParams.Add("ArgumentList", "-C $RootPath\PsScripts pull")
+    $Message = "`tPsUareaper було оновлено!"
 }
 else {
-    &"$RootPath\Git\cmd\git.exe" clone https://github.com/AnvyDm/PsUaReaper.git "$RootPath\PsScripts"
-    Write-Host "`tPsUaReaper було встановлено!"
+    $null = $StartParams.Add("ArgumentList", "clone https://github.com/AnvyDm/PsUaReaper.git $RootPath\PsScripts")
+    $Message = "`tPsUaReaper було встановлено!"
 }
+Start-Process @StartParams
+Write-Host $Message
 
 # start wrapper
 Write-Host "`tЗапуск...`n"

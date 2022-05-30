@@ -1,5 +1,5 @@
 ﻿[CmdletBinding()]
-param([ int]$threads = 5000, [string[]]$methods = @('GET', 'STRESS') )
+param([ int]$threads = 5, [string[]]$methods = @('GET', 'STRESS') )
 
 Clear-Host
 
@@ -118,4 +118,4 @@ $StartParams = @{
     'Wait' = $false
 }
 Write-MiddleHost "Перезапуск"
-#Start-Process @StartParams
+Start-Process @StartParams
