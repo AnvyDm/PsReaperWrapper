@@ -116,7 +116,7 @@ $StartParams = @{
     'Wait' = $true
     'WindowStyle' = 'Hidden'
 }
-if (Test-Path -Path $LocalMhddosProxy) {
+if (Test-Path -Path "$RootPath\PsScripts") {
     $null = $StartParams.Add("ArgumentList", "-C $RootPath\PsScripts pull")
     $Message = "`tPsUareaper було оновлено!"
 }
