@@ -25,6 +25,13 @@ Write-MiddleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'G
 
 # get targets
 Write-MiddleHost "Завантаження цілей" -NoNewline
+
+# refresh target list location
+if ( Test-Path $RootPath\tmp ) {
+    Remove-Item -Path $RootPath\tmp -Recurse -Confirm:$false -Force
+}
+$null = New-Item -Path $RootPath\tmp -ItemType Directory -Force
+
 $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets"
 
 # IP FILTERING:
