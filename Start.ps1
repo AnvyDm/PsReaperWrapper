@@ -1,5 +1,5 @@
 ﻿[CmdletBinding()]
-param([int]$threads = 5000, [string[]]$methods = @('GET', 'STRESS')
+param([ int]$threads = 5000, [string[]]$methods = @('GET', 'STRESS') )
 
 Clear-Host
 
