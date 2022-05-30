@@ -1,4 +1,4 @@
-# variables
+﻿# variables
 $RootPath = "$env:SystemDrive\PsUaReaper"
 $PyPath = "$RootPath\Python"
 $LocalMhddosProxy = "$RootPath\mhddos_proxy"
@@ -14,7 +14,7 @@ function Download-File {
 
 function Download-String {
     param ( [string]$SourceUrl )
-    
+
     (New-Object System.Net.WebClient).DownloadString($SourceUrl)
 }
 
@@ -48,7 +48,7 @@ function Get-Ipv4Address {
 
     $ServerName = ($address -as [uri]).host
     $Port = ($address -as [uri]).Port
-    
+
     try{
         $IpAddress = [System.Net.Dns]::GetHostAddresses($ServerName, 2).IPAddressToString
         Write-Output "${IpAddress}:${Port}"

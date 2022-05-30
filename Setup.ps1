@@ -7,7 +7,7 @@ $host.ui.RawUI.WindowTitle = "Ps Ukrainian Reaper"
 
 # Will be necessary for Windows 7 adaptation
 If ($PSVersionTable.PSVersion.Major -lt 3) {
-    $PsScriptRoot = Split-Path $MyInvocation.MyCommand.Path 
+    $PsScriptRoot = Split-Path $MyInvocation.MyCommand.Path
 }
 
 # List of generic functions
@@ -64,7 +64,7 @@ foreach ($key in $ScriptEnvs.Keys) {
     If ( (Test-Path -Path $srcTarget) -and !$Force ) { continue }
     Write-Host "`tЗавантаження $Name..."
     $srcArchive = Download-File -SourceUrl $srcUrl -DestinationPath $RootPath
-    
+
     Write-Host "`tРозпаковка $Name..."
     Unzip-File -Path $srcArchive -DestinationPath $srcTarget
     Remove-Item -Path $srcArchive -Force
@@ -97,7 +97,7 @@ else {
     Write-Host "`tЗавантаження Git..."
     $GitUrl = 'https://github.com/git-for-windows/git/releases/download/v2.36.1.windows.1/PortableGit-2.36.1-32-bit.7z.exe'
     $GitArchive = Download-File -SourceUrl $GitUrl -DestinationPath $RootPath
-    
+
     Write-Host "`tРозпаковка Git..."
     Start-Process -FilePath $GitArchive -ArgumentList "-o `"$RootPath\Git`" -y" -Wait -WindowStyle 'Hidden'
     Remove-Item -Path $GitArchive -Force

@@ -1,6 +1,6 @@
 ﻿[CmdletBinding()]
-param([ int]$threads = 5, [string[]]$methods = @('GET', 'STRESS'),
-        [ValidateSet('en', 'ua')]$Lang = 'en' )
+param([ int]$threads = 2500, [string[]]$methods = @('GET', 'STRESS'),
+        [ValidateSet('en', 'ua')]$Lang = 'ua' )
 
 Clear-Host
 
@@ -10,7 +10,7 @@ $strMethods = "$methods"
 
 # Will be necessary for Windows 7 adaptation
 If ($PSVersionTable.PSVersion.Major -lt 3) {
-    $PsScriptRoot = Split-Path $MyInvocation.MyCommand.Path 
+    $PsScriptRoot = Split-Path $MyInvocation.MyCommand.Path
 }
 . $PsScriptRoot\functions.ps1
 
@@ -60,7 +60,7 @@ $NumberOfTargets = $TargetsList.Length
 # $LnInFile = [math]::Ceiling($NumberOfTargets / $NumberOfTargetsFiles)
 
 # dynamic number of files, static number of targets in file
-$LnInFile  = 500
+$LnInFile  = 1000
 $NumberOfTargetsFiles = [math]::Ceiling($NumberOfTargets / $LnInFile)
 for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++){
     $null = $TargetFiles.Add("xa${i}.uaripper.txt")
