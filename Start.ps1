@@ -106,8 +106,9 @@ try {
         Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
     }
 }
-catch { $_; Write-MiddleHost "Завершення роботи mhddos_proxy" -Here -NoNewline }
+catch { $_}
 finally {
+    Write-MiddleHost "Завершення роботи mhddos_proxy" -Here -NoNewline
     Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
 }
 
