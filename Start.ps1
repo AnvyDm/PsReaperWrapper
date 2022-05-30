@@ -1,5 +1,6 @@
 ﻿[CmdletBinding()]
-param([ int]$threads = 5, [string[]]$methods = @('GET', 'STRESS') )
+param([ int]$threads = 5, [string[]]$methods = @('GET', 'STRESS'),
+        [ValidateSet('en', 'ua')]$Lang = 'ua' )
 
 Clear-Host
 
@@ -94,7 +95,7 @@ try {
         $FilePath = "$RootPath\tmp\$targetFile"
         $StartParams = @{
             'FilePath' = "$PyPath\python.exe"
-            'ArgumentList' = "$LocalMhddosProxy\runner.py -c $FilePath -t $threads --http-methods $strMethods"
+            'ArgumentList' = "$LocalMhddosProxy\runner.py -c $FilePath -t $threads --http-methods $strMethods --lang $Lang"
             'WorkingDirectory' = "$LocalMhddosProxy"
             'NoNewWindow' = $true
             'PassThru' = $true
@@ -105,9 +106,8 @@ try {
         Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
     }
 }
-catch { $_ }
+catch { $_; Write-MiddleHost "Завершення роботи mhddos_proxy" -Here -NoNewline }
 finally {
-    Write-MiddleHost "Завершення роботи mhddos_proxy"
     Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
 }
 
