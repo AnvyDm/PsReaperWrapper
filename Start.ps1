@@ -90,18 +90,17 @@ Write-MiddleHost "Щоб завершити роботу натисніть Ctrl
 Write-MiddleHost "Запуск Multidd"
 
 try {
-    foreach $targetFile in $TargetFiles) {
-        
+    foreach ($targetFile in $TargetFiles) {
         $FilePath = "$RootPath\tmp\$targetFile"
         $StartParams = @{
             'FilePath' = "$PyPath\python.exe"
-            'ArgumentList' = "$LocalMhddosProxy\runner.py -c $ilePath -t $threads --http-methods $strMethods"
+            'ArgumentList' = "$LocalMhddosProxy\runner.py -c $FilePath -t $threads --http-methods $strMethods"
             'WorkingDirectory' = "$LocalMhddosProxy"
             'NoNewWindow' = $true
             'PassThru' = $true
             'Wait' = $false
         }
-        ($PyProcess = Start-Process @StartParams).PriorityClass = [System.Diagnostics.ProcessPriorityClass]::Idle
+        (Start-Process @StartParams).PriorityClass = [System.Diagnostics.ProcessPriorityClass]::Idle
         Start-Sleep -Seconds 60
         Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
     }
