@@ -1,6 +1,6 @@
 ﻿[CmdletBinding()]
 param([ int]$threads = 5, [string[]]$methods = @('GET', 'STRESS'),
-        [ValidateSet('en', 'ua')]$Lang = 'ua' )
+        [ValidateSet('en', 'ua')]$Lang = 'en' )
 
 Clear-Host
 
