@@ -124,6 +124,9 @@ else {
 Start-Process @StartParams
 Write-Host $Message
 
+# Create start script
+Copy-Item -Path "$RootPath\PsScripts\Start.cmd" -Destination "$RootPath\Start.cmd" -Force
+
 # start wrapper
 Write-Host "`tЗапуск...`n"
-&"$RootPath\Powershell\pwsh.exe" -ExecutionPolicy Bypass -File "$RootPath\PsScripts\Start.ps1"
+&"$RootPath\Powershell\pwsh.exe" -ExecutionPolicy Bypass -File "$RootPath\PsScripts\wrapper.ps1"

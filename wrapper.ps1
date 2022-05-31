@@ -121,7 +121,7 @@ finally {
 
 $StartParams = @{
     'FilePath' = "$RootPath\Powershell\pwsh.exe"
-    'ArgumentList' = "-ExecutionPolicy Bypass -File `"$RootPath\PsScripts\Start.ps1`""
+    'ArgumentList' = "-ExecutionPolicy Bypass -File `"$RootPath\PsScripts\wrapper.ps1`""
     'NoNewWindow' = $true
     'Wait' = $false
 }
