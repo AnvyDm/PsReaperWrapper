@@ -60,7 +60,7 @@ $NumberOfTargets = $TargetsList.Length
 # $LnInFile = [math]::Ceiling($NumberOfTargets / $NumberOfTargetsFiles)
 
 # dynamic number of files, static number of targets in file
-$LnInFile  = 1000
+$LnInFile  = 500
 $NumberOfTargetsFiles = [math]::Ceiling($NumberOfTargets / $LnInFile)
 for ($i = 0; $i -lt $NumberOfTargetsFiles; $i++){
     $null = $TargetFiles.Add("xa${i}.uaripper.txt")
@@ -109,7 +109,7 @@ try {
             'Wait' = $false
         }
         (Start-Process @StartParams).PriorityClass = [System.Diagnostics.ProcessPriorityClass]::Idle
-        Start-Sleep -Seconds 300 # 5 minute timeout to process one list
+        Start-Sleep -Seconds 600 # 10 minute timeout to process one list
         Get-Process | Where-Object { $_.Path -eq "$PyPath\python.exe"} | Stop-Process -Force
     }
 }
