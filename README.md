@@ -5,9 +5,9 @@ PowerShell-враппер для запуску Multiddos на Windows.
 - Сумісніть з Windows 7 SP1
 - Автоматичне оновлення цілей
 
-Джерела натхнення:
-[KarboDuck](https://github.com/KarboDuck)
-[ahovdryk](https://github.com/ahovdryk)
+Джерела натхнення:</br>
+[KarboDuck](https://github.com/KarboDuck)</br>
+[ahovdryk](https://github.com/ahovdryk)</br>
 
 ## Перший старт:
 1. Найлегший шлях для старих систем (Windows 7, 8, 8.1, 10 до білда 1803):
