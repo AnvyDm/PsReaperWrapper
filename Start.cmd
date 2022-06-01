@@ -1,3 +1,3 @@
 echo off
 
-"%~DPOPowerShell\pwsh.exe" -ExecutionPolicy Bypass -File "%~DP0PsScripts\Setup.ps1"
+"%~DP0PowerShell\pwsh.exe" -ExecutionPolicy Bypass -File "%~DP0PsScripts\Setup.ps1"
